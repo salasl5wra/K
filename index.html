@@ -1,113 +1,643 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti ❤️</title>
-    <style>
-        /* Estilos románticos y diseño de la página */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #ffe6f2; /* Tono rosa pastel */
-            color: #4a4a4a; 
-            text-align: center; 
-            padding: 20px; 
-            display: none; /* Oculta todo hasta que ponga la contraseña */
-        }
-        h1 { color: #d63384; font-size: 2.5em; margin-bottom: 5px;}
-        h2 { color: #c2185b; border-bottom: 2px solid #ffb3d9; padding-bottom: 10px;}
-        .subtitle { font-style: italic; color: #888; margin-bottom: 30px; }
-        
-        /* Cajas de contenido */
-        .section { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            margin: 20px auto; 
-            max-width: 600px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            text-align: left;
-        }
-        .note-date { font-size: 0.8em; color: #aaa; text-align: right; display: block;}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Italiana&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   TOKENS
+   ============================================ */
+:root{
+  --paper:        #f6ecd9;
+  --paper-dark:    #ead9b8;
+  --ink:           #3a2c22;
+  --ink-soft:      #6b584a;
+  --wine:          #6e1f2a;
+  --wine-deep:     #4d121b;
+  --gold:          #a9802f;
+  --gold-soft:     #c9a55c;
+  --shadow:        rgba(40, 20, 10, 0.35);
+
+  --display: 'Italiana', serif;
+  --script:  'Cormorant Garamond', serif;
+  --body:    'EB Garamond', serif;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  background:
+    radial-gradient(ellipse at top, #2a1318 0%, #150b0d 60%, #0c0608 100%);
+  font-family: var(--body);
+  color: var(--ink);
+  overflow:hidden;
+}
+
+body.locked{ overflow:hidden; }
+
+/* ============================================
+   PANTALLA DE CONTRASEÑA
+   ============================================ */
+#lockscreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background:
+    radial-gradient(ellipse at top, #2a1318 0%, #150b0d 60%, #0c0608 100%);
+  z-index:200;
+  padding:24px;
+  text-align:center;
+}
+
+#lockscreen .seal{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  border:1px solid var(--gold-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:28px;
+  color:var(--gold-soft);
+  font-size:24px;
+  opacity:0.9;
+}
+
+#lockscreen h1{
+  font-family:var(--display);
+  font-weight:400;
+  font-size:clamp(28px, 6vw, 44px);
+  color:var(--paper);
+  letter-spacing:0.04em;
+  margin:0 0 10px;
+}
+
+#lockscreen p{
+  font-family:var(--script);
+  font-style:italic;
+  color:#cbb89a;
+  font-size:18px;
+  margin:0 0 36px;
+  max-width:360px;
+}
+
+#lock-form{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+}
+
+#lock-input{
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--gold-soft);
+  color:var(--paper);
+  font-family:var(--script);
+  font-size:24px;
+  letter-spacing:0.5em;
+  text-align:center;
+  width:220px;
+  padding:8px 0;
+  outline:none;
+}
+#lock-input::placeholder{
+  color:#7a6450;
+  letter-spacing:0.3em;
+  font-size:14px;
+}
+#lock-input:focus{ border-bottom-color:var(--paper); }
+
+#lock-submit{
+  background:none;
+  border:1px solid var(--gold-soft);
+  color:var(--gold-soft);
+  font-family:var(--body);
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  font-size:12px;
+  padding:10px 28px;
+  border-radius:30px;
+  cursor:pointer;
+  transition:all .25s ease;
+  margin-top:6px;
+}
+#lock-submit:hover{
+  background:var(--gold-soft);
+  color:#2a1318;
+}
+
+#lock-error{
+  font-family:var(--body);
+  font-size:13px;
+  color:#d98a8a;
+  height:18px;
+  letter-spacing:0.02em;
+}
+
+/* ============================================
+   ESCENARIO DEL LIBRO
+   ============================================ */
+#stage{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  perspective:2400px;
+  padding:20px;
+}
+
+body.unlocked #stage{ display:flex; }
+
+/* Luz ambiental detrás del libro */
+#stage::before{
+  content:"";
+  position:absolute;
+  width:min(70vw, 900px);
+  height:min(70vw, 900px);
+  background:radial-gradient(circle, rgba(201,165,92,0.18) 0%, rgba(201,165,92,0) 70%);
+  pointer-events:none;
+}
+
+/* ============================================
+   LIBRO
+   ============================================ */
+#book{
+  position:relative;
+  width:min(86vw, 420px);
+  height:min(74vh, 620px);
+  transform-style:preserve-3d;
+}
+
+.page{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
+  border-radius:3px 10px 10px 3px;
+  box-shadow:
+    0 25px 60px var(--shadow),
+    inset -1px 0 0 rgba(0,0,0,0.08);
+  padding:40px 34px 34px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.page::after{
+  /* sombra del lomo */
+  content:"";
+  position:absolute;
+  top:0; left:0; bottom:0;
+  width:28px;
+  background:linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0));
+  pointer-events:none;
+}
+
+.page-eyebrow{
+  font-family:var(--body);
+  font-size:11px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0 0 6px;
+}
+
+.page-title{
+  font-family:var(--display);
+  font-weight:400;
+  font-size:clamp(22px, 5.5vw, 30px);
+  color:var(--wine-deep);
+  margin:0 0 4px;
+  line-height:1.15;
+}
+
+.page-date{
+  font-family:var(--script);
+  font-style:italic;
+  font-size:14px;
+  color:var(--ink-soft);
+  margin:0 0 18px;
+}
+
+.page-divider{
+  width:46px;
+  height:1px;
+  background:var(--gold-soft);
+  margin:0 0 20px;
+}
+
+.page-body{
+  font-family:var(--body);
+  font-size:15.5px;
+  line-height:1.75;
+  color:var(--ink);
+  overflow-y:auto;
+  padding-right:6px;
+  flex:1;
+}
+.page-body p{ margin:0 0 1em; }
+.page-body p:last-child{ margin-bottom:0; }
+
+.page-body::-webkit-scrollbar{ width:4px; }
+.page-body::-webkit-scrollbar-thumb{ background:var(--gold-soft); border-radius:4px; }
+.page-body::-webkit-scrollbar-track{ background:transparent; }
+
+.page-number{
+  text-align:center;
+  font-family:var(--script);
+  font-style:italic;
+  font-size:12px;
+  color:var(--ink-soft);
+  margin-top:14px;
+  opacity:0.8;
+}
+
+/* ---- página de Portada ---- */
+#page-cover{
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at center, #7a2733 0%, #5a1620 55%, #3d0f17 100%);
+  color:var(--paper);
+}
+#page-cover .seal{
+  width:58px; height:58px; border-radius:50%;
+  border:1px solid var(--gold-soft);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold-soft); font-size:22px;
+  margin-bottom:22px;
+}
+#page-cover h1{
+  font-family:var(--display);
+  font-weight:400;
+  font-size:clamp(30px, 7vw, 40px);
+  letter-spacing:0.03em;
+  margin:0 0 10px;
+}
+#page-cover .cover-sub{
+  font-family:var(--script);
+  font-style:italic;
+  font-size:16px;
+  color:#e3cbb0;
+  max-width:260px;
+}
+#page-cover .cover-tap{
+  position:absolute;
+  bottom:30px;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--gold-soft);
+  opacity:0.8;
+}
+
+/* ---- página de Índice ---- */
+.toc-list{
+  list-style:none;
+  margin:0; padding:0;
+  flex:1;
+  overflow-y:auto;
+}
+.toc-list li{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px;
+  font-family:var(--body);
+  font-size:14.5px;
+  color:var(--ink);
+  padding:10px 0;
+  border-bottom:1px dotted var(--gold-soft);
+  cursor:pointer;
+}
+.toc-list li:hover{ color:var(--wine); }
+.toc-list .toc-name{ flex:1; }
+.toc-list .toc-no{
+  font-family:var(--script);
+  font-style:italic;
+  color:var(--ink-soft);
+  font-size:13px;
+}
+.toc-section-label{
+  font-family:var(--body);
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:18px 0 4px;
+}
+.toc-section-label:first-child{ margin-top:0; }
+
+/* ============================================
+   NAVEGACIÓN
+   ============================================ */
+#book-nav{
+  position:fixed;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:18px;
+  z-index:50;
+}
+.nav-btn{
+  background:rgba(246,236,217,0.08);
+  border:1px solid var(--gold-soft);
+  color:var(--gold-soft);
+  width:38px; height:38px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  transition:all .2s ease;
+}
+.nav-btn:hover{ background:var(--gold-soft); color:#2a1318; }
+.nav-btn:disabled{ opacity:0.25; cursor:default; background:none; color:var(--gold-soft); }
+
+#nav-label{
+  font-family:var(--script);
+  font-style:italic;
+  color:#cbb89a;
+  font-size:13px;
+  min-width:120px;
+  text-align:center;
+}
+
+/* ============================================
+   RESPONSIVE / MOTION
+   ============================================ */
+@media (max-width:480px){
+  .page{ padding:30px 22px 26px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; animation:none !important; }
+}
+
+:focus-visible{ outline:2px solid var(--gold-soft); outline-offset:2px; }
+</style>
 </head>
-<body>
+<body class="locked">
 
-    <h1>Nuestro Lugar Especial ❤️</h1>
-    <p class="subtitle">Un espacio para recordarte que siempre estás en mi mente.</p>
+<!-- ============================================
+     PANTALLA DE CONTRASEÑA
+     ============================================ -->
+<div id="lockscreen">
+  <div class="seal">❤</div>
+  <h1>Nuestro Lugar Especial</h1>
+  <p>Un espacio para recordarte que siempre estás en mi mente.</p>
+  <form id="lock-form">
+    <input type="password" id="lock-input" placeholder="DDMMAA" inputmode="numeric" maxlength="6" autocomplete="off">
+    <button type="submit" id="lock-submit">Entrar</button>
+    <div id="lock-error"></div>
+  </form>
+</div>
 
-    <div class="section">
-        <h2>📝 Notas Románticas</h2>
-        <p><strong>Hola mi vida,</strong><br>
-        Quería dejarte esta primera notita para decirte lo mucho que me encantas y lo feliz que me hace compartir mis días contigo. Pienso en ti todo el tiempo.</p>
-        <span class="note-date">Escrito hoy, pensando en ti.</span>
-    </div>
+<!-- ============================================
+     ESCENARIO DEL LIBRO
+     ============================================ -->
+<div id="stage">
+  <div id="book"></div>
+</div>
 
-    <div class="section">
-        <h2>📖 Nuestro Libro</h2>
-        <p><em>Capitulo 1 - 
-            El primer cruce de palabras entre ellos no tuvo nada de romántico. Fue un choque eléctrico, áspero y territorial.
+<div id="book-nav" style="display:none;">
+  <button class="nav-btn" id="prev-btn" aria-label="Página anterior">‹</button>
+  <span id="nav-label"></span>
+  <button class="nav-btn" id="next-btn" aria-label="Página siguiente">›</button>
+</div>
 
-Ella había cruzado el pasillo hacia el grupo que estaba tomando la capacitacion, el no sabia que ella seria la nueva coordinadora del area. El ruido constante de las máquinas era abrumador, pero no tanto como la presencia del hombre que le cerró el paso. Él tenía la postura de alguien acostumbrado a dar órdenes y a que el mundo se apartara de su camino.
+<script>
+/* ============================================================
+   CONTENIDO DEL LIBRO — edita aquí para agregar capítulos
+   ============================================================
+   Para agregar un capítulo nuevo, copia un bloque { } dentro
+   del arreglo CAPITULOS y cambia título / fecha / texto.
+   Cada elemento de "texto" es un párrafo distinto.
+============================================================= */
 
-—¿Qué haces aquí? —le preguntó él. Su voz era profunda, carente de cualquier amabilidad—. Esta no es tu área. Sal.
+const NOTAS = [
+  {
+    titulo: "Para mi vida",
+    fecha: "Escrito hoy, pensando en ti.",
+    texto: [
+      "Hola mi vida, quería dejarte esta primera notita para decirte lo mucho que me encantas y lo feliz que me hace compartir mis días contigo. Pienso en ti todo el tiempo."
+    ]
+  }
+];
 
-El rechazo le golpeó el pecho a ella con una fuerza desproporcionada. Una oleada de humillación y furia le subió a la garganta. Podría haberse disculpado, pero en lugar de eso, alzó la barbilla, sosteniéndole la mirada un segundo más de lo socialmente aceptable. Vio sus ojos oscuros, la tensión en su mandíbula y, fugazmente, el destello de oro en su dedo anular.
+const RECORDATORIOS = [
+  {
+    titulo: "Agenda de mi corazón",
+    fecha: "Recordatorio diario",
+    texto: [
+      "Eres la persona más increíble del mundo y estoy muy orgulloso de ti."
+    ]
+  }
+];
 
-—Solo buscaba aprender —replicó ella, dándose la vuelta con el corazón latiendo a mil por hora—. No te preocupes, no me interesa quedarme donde no me llaman.
+const CAPITULOS = [
+  {
+    titulo: "Capítulo 1",
+    fecha: "",
+    texto: [
+      "El primer cruce de palabras entre ellos no tuvo nada de romántico. Fue un choque eléctrico, áspero y territorial.",
+      "Ella había cruzado el pasillo hacia el grupo que estaba tomando la capacitación, él no sabía que ella sería la nueva coordinadora del área. El ruido constante de las máquinas era abrumador, pero no tanto como la presencia del hombre que le cerró el paso. Él tenía la postura de alguien acostumbrado a dar órdenes y a que el mundo se apartara de su camino.",
+      "—¿Qué haces aquí? —le preguntó él. Su voz era profunda, carente de cualquier amabilidad—. Esta no es tu área. Sal.",
+      "El rechazo le golpeó el pecho a ella con una fuerza desproporcionada. Una oleada de humillación y furia le subió a la garganta. Podría haberse disculpado, pero en lugar de eso, alzó la barbilla, sosteniéndole la mirada un segundo más de lo socialmente aceptable. Vio sus ojos oscuros, la tensión en su mandíbula y, fugazmente, el destello de oro en su dedo anular.",
+      "—Solo buscaba aprender —replicó ella, dándose la vuelta con el corazón latiendo a mil por hora—. No te preocupes, no me interesa quedarme donde no me llaman.",
+      "Mientras se alejaba, sintió la mirada de él clavada en su espalda. Fue un rechazo, sí. Pero la dejó con una extraña y adictiva sensación de adrenalina circulando por sus venas.",
+      "El destino, o quizás algo más, decidió que sus caminos debían volver a cruzarse poco tiempo después. Las sesiones para la nueva certificación los obligaron a sentarse en la misma mesa durante horas interminables.",
+      "Comenzó con cruces de miradas. Luego, comentarios sarcásticos en voz baja. Para la segunda semana de entrenamiento, ya buscaban excusas para verse. En esas pláticas, las barreras cayeron con una velocidad vertiginosa. Ella sentía todo al doscientos por ciento; cada roce accidental de sus rodillas bajo la mesa era un incendio.",
+      "Él no tardó en dejarle ver sus demonios. Le habló de su afición por las motocicletas a velocidades suicidas, de cómo una rutina monótona lo asfixiaba, y de su necesidad casi patológica de sentir que estaba a un segundo de perder el control.",
+      "—Soy un desastre andante —le dijo una tarde, recargado contra un barandal—. Si te acercas demasiado, te vas a quemar. Yo no soy el héroe de la historia, soy el villano. Rompo las cosas. Rompo a las personas.",
+      "Para cualquier otra persona, aquello habría sido una señal de evacuación inmediata. Pero para ella, sonó a un reto. A un hogar. La intensidad de él calmaba el caos interno que ella siempre llevaba por dentro. Ignorando todas las luces rojas, le sonrió con una devoción casi temeraria.",
+      "—Yo no estoy buscando que me salven —respondió ella—. Y me gusta el fuego.",
+      "El 31 de octubre, el aire de la ciudad estaba cargado con la electricidad típica de Halloween. Gente disfrazada, calles caóticas, el anonimato perfecto para quienes querían esconderse.",
+      "Él pasó a recogerla a las cinco de la tarde. Cuando ella subió al coche, el silencio era denso, pesado, cargado con semanas de miradas reprimidas. Él condujo rápido, rozando los límites de velocidad, alimentándose del riesgo mientras la llevaba a un lugar alejado, a salvo de miradas indiscretas.",
+      "Cuando finalmente aparcó el coche en la penumbra, apagó el motor, pero no las luces del tablero. Se giró hacia ella. Su respiración era pesada. Levantó una mano y trazó la línea de la mandíbula de ella con los nudillos. Ella cerró los ojos, sintiendo que el mundo entero convergía en ese único punto de contacto.",
+      "Él se detuvo, retirando la mano un milímetro. La miró a los ojos con una seriedad brutal.",
+      "—Te lo voy a preguntar una sola vez, y esta es tu última oportunidad para huir —susurró él, con la voz ronca—. Tengo un anillo en el dedo y un caos en la cabeza. ¿Estás segura de esto? Porque una vez que crucemos esta línea, no te voy a dejar ir tan fácilmente.",
+      "Ella sintió ese miedo familiar al abandono, esa necesidad desesperada de aferrarse a algo, a alguien, latiendo en sus sienes. No lo dudó ni una fracción de segundo.",
+      "—Estoy segura.",
+      "Lo que siguió fue un choque de trenes. Fue brusco, desesperado y consumió todo el oxígeno que les quedaba. Se aferraron el uno al otro como si el mundo fuera a acabarse a la medianoche. Pero cuando la madrugada los alcanzó y el calor del momento se enfrió, ambos se dieron cuenta de su terrible error de cálculo.",
+      "Habían pensado que ceder a la tentación, que quitarse las ganas esa sola noche, apagaría la curiosidad y los dejaría continuar con sus vidas. Fue exactamente lo contrario.",
+      "Aquella primera vez no fue un cierre. Fue la primera dosis de una droga que no sabían que necesitaban. Y mientras él la dejaba de vuelta en su casa, con el silencio inundando el coche de nuevo, ella supo que ya no habría vuelta atrás. Estaban condenados a buscarse, a destruirse y a necesitarse, cada vez con más frecuencia, cada vez con más hambre."
+    ]
+  }
+  // 👉 Para agregar el Capítulo 2, copia este bloque completo aquí abajo
+  // (después de una coma) y cambia el contenido:
+  //
+  // {
+  //   titulo: "Capítulo 2",
+  //   fecha: "",
+  //   texto: [
+  //     "Primer párrafo del capítulo...",
+  //     "Segundo párrafo..."
+  //   ]
+  // }
+];
 
-Mientras se alejaba, sintió la mirada de él clavada en su espalda. Fue un rechazo, sí. Pero la dejó con una extraña y adictiva sensación de adrenalina circulando por sus venas.
+/* ============================================================
+   CONTRASEÑA
+============================================================= */
+const PASSWORD = "311025";
 
-El destino, o quizás algo mas, decidió que sus caminos debían volver a cruzarse poco tiempo después. Las sesiones para la nueva certificación los obligaron a sentarse en la misma mesa durante horas interminables.
+const lockForm  = document.getElementById('lock-form');
+const lockInput = document.getElementById('lock-input');
+const lockError = document.getElementById('lock-error');
 
-Comenzó con cruces de miradas. Luego, comentarios sarcásticos en voz baja. Para la segunda semana de entrenamiento, ya buscaban excusas verse. En esas platicas, las barreras cayeron con una velocidad vertiginosa. Ella sentía todo al doscientos por ciento; cada roce accidental de sus rodillas bajo la mesa era un incendio.
+lockForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(lockInput.value === PASSWORD){
+    document.body.classList.remove('locked');
+    document.body.classList.add('unlocked');
+    buildBook();
+  } else {
+    lockError.textContent = "Esa no es la fecha correcta 💔 Intenta de nuevo.";
+    lockInput.value = "";
+    lockInput.focus();
+  }
+});
 
-Él no tardó en dejarle ver sus demonios. Le habló de su afición por las motocicletas a velocidades suicidas, de cómo una rutina monótona lo asfixiaba, y de su necesidad casi patológica de sentir que estaba a un segundo de perder el control.
+/* ============================================================
+   CONSTRUCCIÓN DEL LIBRO
+============================================================= */
+let pages = [];
+let current = 0;
 
-—Soy un desastre andante —le dijo una tarde, recargado contra un barandal—. Si te acercas demasiado, te vas a quemar. Yo no soy el héroe de la historia, soy el villano. Rompo las cosas. Rompo a las personas
-Para cualquier otra persona, aquello habría sido una señal de evacuación inmediata. Pero para ella, sonó a un reto. A un hogar. La intensidad de él calmaba el caos interno que ella siempre llevaba por dentro. Ignorando todas las luces rojas, le sonrió con una devoción casi temeraria.
+function buildBook(){
+  pages = [];
 
-—Yo no estoy buscando que me salven —respondió ella—. Y me gusta el fuego.
+  // Portada
+  pages.push({ type:'cover' });
 
-El 31 de octubre, el aire de la ciudad estaba cargado con la electricidad típica de Halloween. Gente disfrazada, calles caóticas, el anonimato perfecto para quienes querían esconderse.
+  // Índice
+  pages.push({ type:'toc' });
 
-Él pasó a recogerla a las cinco de la tarde. Cuando ella subió al coche, el silencio era denso, pesado, cargado con semanas de miradas reprimidas. Él condujo rápido, rozando los límites de velocidad, alimentándose del riesgo mientras la llevaba a un lugar alejado, a salvo de miradas indiscretas.
+  // Notas
+  NOTAS.forEach((n, i) => pages.push({ type:'content', eyebrow:'Nota romántica', data:n, group:'notas', idx:i }));
 
-Cuando finalmente aparcó el coche en la penumbra, apagó el motor, pero no las luces del tablero. Se giró hacia ella. Su respiración era pesada. Levantó una mano y trazó la línea de la mandíbula de ella con los nudillos. Ella cerró los ojos, sintiendo que el mundo entero convergía en ese único punto de contacto.
+  // Capítulos del libro
+  CAPITULOS.forEach((c, i) => pages.push({ type:'content', eyebrow:'Nuestro libro', data:c, group:'capitulos', idx:i }));
 
-Él se detuvo, retirando la mano un milímetro. La miró a los ojos con una seriedad brutal.
+  // Recordatorios
+  RECORDATORIOS.forEach((r, i) => pages.push({ type:'content', eyebrow:'Recordatorio', data:r, group:'recordatorios', idx:i }));
 
-—Te lo voy a preguntar una sola vez, y esta es tu última oportunidad para huir —susurró él, con la voz ronca—. Tengo un anillo en el dedo y un caos en la cabeza. ¿Estás segura de esto? Porque una vez que crucemos esta línea, no te voy a dejar ir tan fácilmente.
+  current = 0;
+  renderPage();
+  document.getElementById('book-nav').style.display = 'flex';
+}
 
-Ella sintió ese miedo familiar al abandono, esa necesidad desesperada de aferrarse a algo, a alguien, latiendo en sus sienes. No lo dudó ni una fracción de segundo.
+function pageHTML(p, pageNum){
+  if(p.type === 'cover'){
+    return `
+      <div class="page" id="page-cover">
+        <div class="seal">❤</div>
+        <h1>Nuestro Lugar Especial</h1>
+        <p class="cover-sub">Un espacio para recordarte que siempre estás en mi mente.</p>
+        <span class="cover-tap">Toca para abrir</span>
+      </div>`;
+  }
+  if(p.type === 'toc'){
+    let html = `<div class="page"><p class="page-eyebrow">Índice</p><h2 class="page-title">Tabla de contenidos</h2><div class="page-divider"></div><ul class="toc-list">`;
+    let n = 2; // arranca después de portada+índice
+    html += `<li class="toc-section-label" style="border:none;cursor:default;">Notas</li>`;
+    NOTAS.forEach((item)=>{ n++; html += tocRow(item.titulo, n); });
+    html += `<li class="toc-section-label" style="border:none;cursor:default;">Nuestro libro</li>`;
+    CAPITULOS.forEach((item)=>{ n++; html += tocRow(item.titulo, n); });
+    html += `<li class="toc-section-label" style="border:none;cursor:default;">Recordatorios</li>`;
+    RECORDATORIOS.forEach((item)=>{ n++; html += tocRow(item.titulo, n); });
+    html += `</ul></div>`;
+    return html;
+  }
+  // contenido
+  const d = p.data;
+  const paras = d.texto.map(t => `<p>${t}</p>`).join('');
+  return `
+    <div class="page">
+      <p class="page-eyebrow">${p.eyebrow}</p>
+      <h2 class="page-title">${d.titulo}</h2>
+      ${d.fecha ? `<p class="page-date">${d.fecha}</p>` : ''}
+      <div class="page-divider"></div>
+      <div class="page-body">${paras}</div>
+      <div class="page-number">${pageNum}</div>
+    </div>`;
+}
 
-—Estoy segura.
+function tocRow(titulo, pageNum){
+  return `<li onclick="goToPageNumber(${pageNum})"><span class="toc-name">${titulo}</span><span class="toc-no">${pageNum}</span></li>`;
+}
 
-Lo que siguió fue un choque de trenes. Fue brusco, desesperado y consumió todo el oxígeno que les quedaba. Se aferraron el uno al otro como si el mundo fuera a acabarse a la medianoche. Pero cuando la madrugada los alcanzó y el calor del momento se enfrió, ambos se dieron cuenta de su terrible error de cálculo.
+function renderPage(){
+  const book = document.getElementById('book');
+  book.innerHTML = pageHTML(pages[current], current + 1);
 
-Habían pensado que ceder a la tentación, que quitarse las ganas esa sola noche, apagaría la curiosidad y los dejaría continuar con sus vidas. Fue exactamente lo contrario.
+  document.getElementById('prev-btn').disabled = (current === 0);
+  document.getElementById('next-btn').disabled = (current === pages.length - 1);
 
-Aquella primera vez no fue un cierre. Fue la primera dosis de una droga que no sabían que necesitaban. Y mientras él la dejaba de vuelta en su casa, con el silencio inundando el coche de nuevo, ella supo que ya no habría vuelta atrás. Estaban condenados a buscarse, a destruirse y a necesitarse, cada vez con más frecuencia, cada vez con más hambre..</em></p>
-    </div>
+  let label = '';
+  if(pages[current].type === 'cover') label = 'Portada';
+  else if(pages[current].type === 'toc') label = 'Índice';
+  else label = pages[current].data.titulo;
+  document.getElementById('nav-label').textContent = label;
+}
 
-    <div class="section">
-        <h2>🗓️ Agenda de mi Corazón</h2>
-        <p><strong>Recordatorio diario:</strong> Eres la persona más increíble del mundo y estoy muy orgulloso de ti.</p>
-    </div>
+function goToPageNumber(n){
+  // n es 1-indexado tal como se muestra en el índice
+  current = Math.max(0, Math.min(pages.length - 1, n - 1));
+  renderPage();
+}
 
-    <script>
-        // Sistema básico de contraseña
-        let pass = prompt("Para entrar, ingresa nuestra fecha especial (DDMMAA):");
-        
-        if(pass === "311025") {
-            // Si la contraseña es correcta, muestra la página
-            document.body.style.display = "block";
-        } else {
-            // Si se equivoca, la bloquea
-            alert("Esa no es la fecha correcta 💔 Intenta de nuevo.");
-            window.location.reload(); // Recarga la página para volver a preguntar
-        }
-    </script>
+function nextPage(){
+  if(current < pages.length - 1){ current++; renderPage(); }
+}
+function prevPage(){
+  if(current > 0){ current--; renderPage(); }
+}
+
+document.getElementById('next-btn').addEventListener('click', nextPage);
+document.getElementById('prev-btn').addEventListener('click', prevPage);
+
+document.getElementById('book').addEventListener('click', function(e){
+  if(pages[current].type === 'cover'){ nextPage(); }
+});
+
+document.addEventListener('keydown', function(e){
+  if(!document.body.classList.contains('unlocked')) return;
+  if(e.key === 'ArrowRight') nextPage();
+  if(e.key === 'ArrowLeft') prevPage();
+});
+
+// swipe básico en móvil
+let touchStartX = 0;
+document.getElementById('stage').addEventListener('touchstart', e=>{
+  touchStartX = e.changedTouches[0].screenX;
+});
+document.getElementById('stage').addEventListener('touchend', e=>{
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  if(Math.abs(dx) > 50){
+    if(dx < 0) nextPage(); else prevPage();
+  }
+});
+</script>
 
 </body>
 </html>
