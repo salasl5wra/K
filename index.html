@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti ❤️</title>
+    <style>
+        /* Estilos románticos y diseño de la página */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #ffe6f2; /* Tono rosa pastel */
+            color: #4a4a4a; 
+            text-align: center; 
+            padding: 20px; 
+            display: none; /* Oculta todo hasta que ponga la contraseña */
+        }
+        h1 { color: #d63384; font-size: 2.5em; margin-bottom: 5px;}
+        h2 { color: #c2185b; border-bottom: 2px solid #ffb3d9; padding-bottom: 10px;}
+        .subtitle { font-style: italic; color: #888; margin-bottom: 30px; }
+        
+        /* Cajas de contenido */
+        .section { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin: 20px auto; 
+            max-width: 600px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            text-align: left;
+        }
+        .note-date { font-size: 0.8em; color: #aaa; text-align: right; display: block;}
+    </style>
+</head>
+<body>
+
+    <h1>Nuestro Rincón Especial ❤️</h1>
+    <p class="subtitle">Un espacio para recordarte que siempre estás en mi mente.</p>
+
+    <div class="section">
+        <h2>📝 Notas Románticas</h2>
+        <p><strong>Hola mi amor,</strong><br>
+        Quería dejarte esta primera notita para decirte lo mucho que te amo y lo feliz que me hace compartir mis días contigo. Pienso en ti todo el tiempo.</p>
+        <span class="note-date">Escrito hoy, pensando en ti.</span>
+    </div>
+
+    <div class="section">
+        <h2>📖 Nuestros Libros y Cartas</h2>
+        <p><em>Aquí puedes escribir textos más largos, como capítulos de su historia juntos, cómo se conocieron, o cartas mensuales.</em></p>
+    </div>
+
+    <div class="section">
+        <h2>🗓️ Agenda de mi Corazón</h2>
+        <p><strong>Recordatorio diario:</strong> Eres la persona más increíble del mundo y estoy muy orgulloso de ti.</p>
+    </div>
+
+    <script>
+        // Sistema básico de contraseña
+        let pass = prompt("Para entrar a nuestro rincón, ingresa la fecha de nuestro aniversario (DDMMAA):");
+        
+        if(pass === "311025") {
+            // Si la contraseña es correcta, muestra la página
+            document.body.style.display = "block";
+        } else {
+            // Si se equivoca, la bloquea
+            alert("Esa no es la fecha correcta 💔 Intenta de nuevo.");
+            window.location.reload(); // Recarga la página para volver a preguntar
+        }
+    </script>
+
+</body>
+</html>
