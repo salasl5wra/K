@@ -345,6 +345,79 @@ body.unlocked #stage{ display:flex; }
 }
 .toc-section-label:first-child{ margin-top:0; }
 
+/* ---- página de Post-its ---- */
+#page-postits{
+  background:
+    repeating-linear-gradient(0deg, #5a4632, #5a4632 2px, #4d3c2b 2px, #4d3c2b 4px),
+    linear-gradient(135deg, #6b5640 0%, #4d3c2b 100%);
+  padding:30px 20px 20px;
+}
+#page-postits .page-eyebrow,
+#page-postits .page-title{ color:var(--paper); }
+#page-postits .page-title{ text-align:center; }
+#page-postits .page-eyebrow{ text-align:center; color:var(--gold-soft); }
+#page-postits .page-divider{ margin:10px auto 16px; background:var(--gold-soft); opacity:0.6; }
+
+.postit-board{
+  flex:1;
+  overflow-y:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px 10px;
+  padding:4px 4px 14px;
+  align-content:start;
+}
+
+.postit{
+  position:relative;
+  padding:14px 12px 16px;
+  font-family:var(--script);
+  font-style:italic;
+  font-size:13.5px;
+  line-height:1.4;
+  color:#3a2c22;
+  box-shadow:0 6px 14px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.4) inset;
+  min-height:90px;
+  display:flex;
+  align-items:center;
+  word-break:break-word;
+}
+.postit::before{
+  /* cinta adhesiva */
+  content:"";
+  position:absolute;
+  top:-9px;
+  left:50%;
+  transform:translateX(-50%) rotate(-2deg);
+  width:38px;
+  height:16px;
+  background:rgba(255,255,255,0.55);
+  border:1px solid rgba(255,255,255,0.3);
+}
+
+.postit:nth-child(10n+1){ background:#fff3a3; }
+.postit:nth-child(10n+2){ background:#ffd6e8; }
+.postit:nth-child(10n+3){ background:#bdeaff; }
+.postit:nth-child(10n+4){ background:#c8f7c5; }
+.postit:nth-child(10n+5){ background:#ffd9b3; }
+.postit:nth-child(10n+6){ background:#e3d1ff; }
+.postit:nth-child(10n+7){ background:#fff3a3; }
+.postit:nth-child(10n+8){ background:#bdeaff; }
+.postit:nth-child(10n+9){ background:#ffd6e8; }
+.postit:nth-child(10n+10){ background:#c8f7c5; }
+
+.postit:nth-child(6n+1){ transform:rotate(-3deg); }
+.postit:nth-child(6n+2){ transform:rotate(2deg); }
+.postit:nth-child(6n+3){ transform:rotate(-1.5deg); }
+.postit:nth-child(6n+4){ transform:rotate(3deg); }
+.postit:nth-child(6n+5){ transform:rotate(-2.5deg); }
+.postit:nth-child(6n+6){ transform:rotate(1.5deg); }
+.postit:hover{ transform:scale(1.06) rotate(0deg); z-index:5; transition:transform .2s ease; }
+
+.postit-board::-webkit-scrollbar{ width:4px; }
+.postit-board::-webkit-scrollbar-thumb{ background:var(--gold-soft); border-radius:4px; }
+.postit-board::-webkit-scrollbar-track{ background:transparent; }
+
 /* ============================================
    NAVEGACIÓN
    ============================================ */
@@ -435,14 +508,19 @@ body.unlocked #stage{ display:flex; }
    Cada elemento de "texto" es un párrafo distinto.
 ============================================================= */
 
+/* Post-its: 10 notas cortas. Cada elemento es el texto de UN post-it.
+   Para agregar más, solo añade otra línea con coma. */
 const NOTAS = [
-  {
-    titulo: "Para mi vida",
-    fecha: "Escrito hoy, pensando en ti.",
-    texto: [
-      "Hola mi vida, quería dejarte esta primera notita para decirte lo mucho que me encantas y lo feliz que me hace compartir mis días contigo. Pienso en ti todo el tiempo."
-    ]
-  }
+  "Hola mi vida, quería dejarte esta primera notita para decirte lo mucho que me encantas y lo feliz que me hace compartir mis días contigo.",
+  "Pienso en ti todo el tiempo.",
+  "Eres mi lugar favorito.",
+  "Gracias por existir.",
+  "Contigo todo es más fácil.",
+  "Hoy también elijo quererte.",
+  "Eres mi persona favorita en este mundo.",
+  "Me encanta tu risa.",
+  "Cuenta conmigo siempre.",
+  "Te amo, hoy y todos los días."
 ];
 
 const RECORDATORIOS = [
@@ -488,7 +566,7 @@ const CAPITULOS = [
     titulo: "Capítulo 2",
     fecha: "",
     texto: [
-      "Primer párrafo del capítulo 2...",
+      "Escribe aquí el primer párrafo del capítulo 2...",
       "Segundo párrafo..."
     ]
   },
@@ -496,7 +574,7 @@ const CAPITULOS = [
     titulo: "Capítulo 3",
     fecha: "",
     texto: [
-      "Primer párrafo del capítulo 3...",
+      "Escribe aquí el primer párrafo del capítulo 3...",
       "Segundo párrafo..."
     ]
   },
@@ -504,7 +582,7 @@ const CAPITULOS = [
     titulo: "Capítulo 4",
     fecha: "",
     texto: [
-      "Primer párrafo del capítulo 4...",
+      "Escribe aquí el primer párrafo del capítulo 4...",
       "Segundo párrafo..."
     ]
   },
@@ -512,7 +590,7 @@ const CAPITULOS = [
     titulo: "Capítulo 5",
     fecha: "",
     texto: [
-      "Primer párrafo del capítulo 5...",
+      "Escribe aquí el primer párrafo del capítulo 5...",
       "Segundo párrafo..."
     ]
   }
@@ -558,8 +636,8 @@ function buildBook(){
   // Índice
   pages.push({ type:'toc' });
 
-  // Notas
-  NOTAS.forEach((n, i) => pages.push({ type:'content', eyebrow:'Nota romántica', data:n, group:'notas', idx:i }));
+  // Notas (corcho de post-its, una sola página)
+  pages.push({ type:'postits' });
 
   // Capítulos del libro
   CAPITULOS.forEach((c, i) => pages.push({ type:'content', eyebrow:'Nuestro libro', data:c, group:'capitulos', idx:i }));
@@ -582,11 +660,21 @@ function pageHTML(p, pageNum){
         <span class="cover-tap">Toca para abrir</span>
       </div>`;
   }
+  if(p.type === 'postits'){
+    const postitsHTML = NOTAS.map(texto => `<div class="postit">${texto}</div>`).join('');
+    return `
+      <div class="page" id="page-postits">
+        <p class="page-eyebrow">Notas</p>
+        <h2 class="page-title">Para ti</h2>
+        <div class="page-divider"></div>
+        <div class="postit-board">${postitsHTML}</div>
+      </div>`;
+  }
   if(p.type === 'toc'){
     let html = `<div class="page"><p class="page-eyebrow">Índice</p><h2 class="page-title">Tabla de contenidos</h2><div class="page-divider"></div><ul class="toc-list">`;
     let n = 2; // arranca después de portada+índice
     html += `<li class="toc-section-label" style="border:none;cursor:default;">Notas</li>`;
-    NOTAS.forEach((item)=>{ n++; html += tocRow(item.titulo, n); });
+    n++; html += tocRow('Notas para ti', n);
     html += `<li class="toc-section-label" style="border:none;cursor:default;">Nuestro libro</li>`;
     CAPITULOS.forEach((item)=>{ n++; html += tocRow(item.titulo, n); });
     html += `<li class="toc-section-label" style="border:none;cursor:default;">Recordatorios</li>`;
@@ -622,6 +710,7 @@ function renderPage(){
   let label = '';
   if(pages[current].type === 'cover') label = 'Portada';
   else if(pages[current].type === 'toc') label = 'Índice';
+  else if(pages[current].type === 'postits') label = 'Notas para ti';
   else label = pages[current].data.titulo;
   document.getElementById('nav-label').textContent = label;
 }
