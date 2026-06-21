@@ -7,24 +7,26 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Italiana&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================
-   TOKENS
+   TOKENS — Dark Love
    ============================================ */
 :root{
-  --paper:        #f6ecd9;
-  --paper-dark:    #ead9b8;
-  --ink:           #3a2c22;
-  --ink-soft:      #6b584a;
-  --wine:          #6e1f2a;
-  --wine-deep:     #4d121b;
-  --gold:          #a9802f;
-  --gold-soft:     #c9a55c;
-  --shadow:        rgba(40, 20, 10, 0.35);
+  --paper:        #e9ded0;
+  --paper-dark:    #d9caae;
+  --ink:           #211a16;
+  --ink-soft:      #564439;
+  --wine:          #7a0c1e;
+  --wine-deep:     #3d0710;
+  --blood:         #9c1320;
+  --gold:          #8a6a2f;
+  --gold-soft:     #b8943f;
+  --void:          #0a0707;
+  --shadow:        rgba(0, 0, 0, 0.6);
 
-  --display: 'Italiana', serif;
+  --display: 'Cinzel', serif;
   --script:  'Cormorant Garamond', serif;
   --body:    'EB Garamond', serif;
 }
@@ -36,7 +38,7 @@ html,body{
   padding:0;
   height:100%;
   background:
-    radial-gradient(ellipse at top, #2a1318 0%, #150b0d 60%, #0c0608 100%);
+    radial-gradient(ellipse at top, #1a0d0f 0%, #0d0606 55%, #050303 100%);
   font-family: var(--body);
   color: var(--ink);
   overflow:hidden;
@@ -55,7 +57,7 @@ body.locked{ overflow:hidden; }
   justify-content:center;
   flex-direction:column;
   background:
-    radial-gradient(ellipse at top, #2a1318 0%, #150b0d 60%, #0c0608 100%);
+    radial-gradient(ellipse at top, #1a0d0f 0%, #0d0606 55%, #050303 100%);
   z-index:200;
   padding:24px;
   text-align:center;
@@ -72,24 +74,26 @@ body.unlocked #lockscreen{ display:none; }
   align-items:center;
   justify-content:center;
   margin-bottom:28px;
-  color:var(--gold-soft);
+  color:var(--blood);
   font-size:24px;
   opacity:0.9;
+  box-shadow:0 0 18px rgba(156,19,32,0.35);
 }
 
 #lockscreen h1{
   font-family:var(--display);
-  font-weight:400;
-  font-size:clamp(28px, 6vw, 44px);
+  font-weight:600;
+  font-size:clamp(24px, 5.5vw, 38px);
   color:var(--paper);
-  letter-spacing:0.04em;
+  letter-spacing:0.08em;
   margin:0 0 10px;
+  text-transform:uppercase;
 }
 
 #lockscreen p{
   font-family:var(--script);
   font-style:italic;
-  color:#cbb89a;
+  color:#9c8770;
   font-size:18px;
   margin:0 0 36px;
   max-width:360px;
@@ -116,35 +120,36 @@ body.unlocked #lockscreen{ display:none; }
   outline:none;
 }
 #lock-input::placeholder{
-  color:#7a6450;
+  color:#5a4738;
   letter-spacing:0.3em;
   font-size:14px;
 }
-#lock-input:focus{ border-bottom-color:var(--paper); }
+#lock-input:focus{ border-bottom-color:var(--blood); }
 
 #lock-submit{
   background:none;
   border:1px solid var(--gold-soft);
   color:var(--gold-soft);
-  font-family:var(--body);
+  font-family:var(--display);
   letter-spacing:0.15em;
   text-transform:uppercase;
   font-size:12px;
   padding:10px 28px;
-  border-radius:30px;
+  border-radius:2px;
   cursor:pointer;
   transition:all .25s ease;
   margin-top:6px;
 }
 #lock-submit:hover{
-  background:var(--gold-soft);
-  color:#2a1318;
+  background:var(--blood);
+  border-color:var(--blood);
+  color:var(--paper);
 }
 
 #lock-error{
   font-family:var(--body);
   font-size:13px;
-  color:#d98a8a;
+  color:var(--blood);
   height:18px;
   letter-spacing:0.02em;
 }
@@ -164,13 +169,12 @@ body.unlocked #lockscreen{ display:none; }
 
 body.unlocked #stage{ display:flex; }
 
-/* Luz ambiental detrás del libro */
 #stage::before{
   content:"";
   position:absolute;
   width:min(70vw, 900px);
   height:min(70vw, 900px);
-  background:radial-gradient(circle, rgba(201,165,92,0.18) 0%, rgba(201,165,92,0) 70%);
+  background:radial-gradient(circle, rgba(156,19,32,0.14) 0%, rgba(156,19,32,0) 70%);
   pointer-events:none;
 }
 
@@ -189,10 +193,10 @@ body.unlocked #stage{ display:flex; }
   inset:0;
   background:
     linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
-  border-radius:3px 10px 10px 3px;
+  border-radius:2px 8px 8px 2px;
   box-shadow:
-    0 25px 60px var(--shadow),
-    inset -1px 0 0 rgba(0,0,0,0.08);
+    0 25px 70px var(--shadow),
+    inset -1px 0 0 rgba(0,0,0,0.15);
   padding:40px 34px 34px;
   display:flex;
   flex-direction:column;
@@ -200,31 +204,31 @@ body.unlocked #stage{ display:flex; }
 }
 
 .page::after{
-  /* sombra del lomo */
   content:"";
   position:absolute;
   top:0; left:0; bottom:0;
   width:28px;
-  background:linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0));
+  background:linear-gradient(90deg, rgba(0,0,0,0.25), rgba(0,0,0,0));
   pointer-events:none;
 }
 
 .page-eyebrow{
-  font-family:var(--body);
-  font-size:11px;
-  letter-spacing:0.2em;
+  font-family:var(--display);
+  font-size:10.5px;
+  letter-spacing:0.25em;
   text-transform:uppercase;
-  color:var(--gold);
+  color:var(--blood);
   margin:0 0 6px;
 }
 
 .page-title{
   font-family:var(--display);
-  font-weight:400;
-  font-size:clamp(22px, 5.5vw, 30px);
+  font-weight:600;
+  font-size:clamp(19px, 4.8vw, 26px);
   color:var(--wine-deep);
   margin:0 0 4px;
-  line-height:1.15;
+  line-height:1.25;
+  letter-spacing:0.01em;
 }
 
 .page-date{
@@ -238,14 +242,23 @@ body.unlocked #stage{ display:flex; }
 .page-divider{
   width:46px;
   height:1px;
-  background:var(--gold-soft);
+  background:linear-gradient(90deg, var(--blood), transparent);
   margin:0 0 20px;
+  position:relative;
+}
+.page-divider::after{
+  content:"❦";
+  position:absolute;
+  left:50px;
+  top:-9px;
+  font-size:13px;
+  color:var(--gold-soft);
 }
 
 .page-body{
   font-family:var(--body);
   font-size:15.5px;
-  line-height:1.75;
+  line-height:1.78;
   color:var(--ink);
   overflow-y:auto;
   padding-right:6px;
@@ -255,7 +268,7 @@ body.unlocked #stage{ display:flex; }
 .page-body p:last-child{ margin-bottom:0; }
 
 .page-body::-webkit-scrollbar{ width:4px; }
-.page-body::-webkit-scrollbar-thumb{ background:var(--gold-soft); border-radius:4px; }
+.page-body::-webkit-scrollbar-thumb{ background:var(--blood); border-radius:4px; }
 .page-body::-webkit-scrollbar-track{ background:transparent; }
 
 .page-number{
@@ -274,28 +287,37 @@ body.unlocked #stage{ display:flex; }
   justify-content:center;
   text-align:center;
   background:
-    radial-gradient(ellipse at center, #7a2733 0%, #5a1620 55%, #3d0f17 100%);
+    radial-gradient(ellipse at center, #2c0810 0%, #190509 55%, #0a0304 100%);
   color:var(--paper);
+}
+#page-cover::before{
+  content:"";
+  position:absolute;
+  inset:14px;
+  border:1px solid rgba(184,148,63,0.35);
+  pointer-events:none;
 }
 #page-cover .seal{
   width:58px; height:58px; border-radius:50%;
   border:1px solid var(--gold-soft);
   display:flex; align-items:center; justify-content:center;
-  color:var(--gold-soft); font-size:22px;
+  color:var(--blood); font-size:22px;
   margin-bottom:22px;
+  box-shadow:0 0 22px rgba(156,19,32,0.4);
 }
 #page-cover h1{
   font-family:var(--display);
-  font-weight:400;
-  font-size:clamp(30px, 7vw, 40px);
-  letter-spacing:0.03em;
+  font-weight:600;
+  font-size:clamp(24px, 6vw, 34px);
+  letter-spacing:0.06em;
   margin:0 0 10px;
+  text-transform:uppercase;
 }
 #page-cover .cover-sub{
   font-family:var(--script);
   font-style:italic;
   font-size:16px;
-  color:#e3cbb0;
+  color:#b69b7d;
   max-width:260px;
 }
 #page-cover .cover-tap{
@@ -327,7 +349,7 @@ body.unlocked #stage{ display:flex; }
   border-bottom:1px dotted var(--gold-soft);
   cursor:pointer;
 }
-.toc-list li:hover{ color:var(--wine); }
+.toc-list li:hover{ color:var(--blood); }
 .toc-list .toc-name{ flex:1; }
 .toc-list .toc-no{
   font-family:var(--script);
@@ -336,27 +358,28 @@ body.unlocked #stage{ display:flex; }
   font-size:13px;
 }
 .toc-section-label{
-  font-family:var(--body);
-  font-size:11px;
-  letter-spacing:0.16em;
+  font-family:var(--display);
+  font-size:10.5px;
+  letter-spacing:0.2em;
   text-transform:uppercase;
   color:var(--gold);
   margin:18px 0 4px;
 }
 .toc-section-label:first-child{ margin-top:0; }
 
-/* ---- página de Post-its ---- */
+/* ---- página de Post-its / Cartas ---- */
 #page-postits{
   background:
-    repeating-linear-gradient(0deg, #5a4632, #5a4632 2px, #4d3c2b 2px, #4d3c2b 4px),
-    linear-gradient(135deg, #6b5640 0%, #4d3c2b 100%);
+    repeating-linear-gradient(0deg, #1d1310, #1d1310 2px, #150d0b 2px, #150d0b 4px),
+    linear-gradient(135deg, #241612 0%, #120a08 100%);
   padding:30px 20px 20px;
 }
 #page-postits .page-eyebrow,
 #page-postits .page-title{ color:var(--paper); }
 #page-postits .page-title{ text-align:center; }
-#page-postits .page-eyebrow{ text-align:center; color:var(--gold-soft); }
-#page-postits .page-divider{ margin:10px auto 16px; background:var(--gold-soft); opacity:0.6; }
+#page-postits .page-eyebrow{ text-align:center; color:var(--blood); }
+#page-postits .page-divider{ margin:10px auto 16px; background:var(--gold-soft); opacity:0.5; }
+#page-postits .page-divider::after{ left:50%; transform:translateX(-50%); top:-9px; }
 
 .postit-board{
   flex:1;
@@ -374,16 +397,16 @@ body.unlocked #stage{ display:flex; }
   font-family:var(--script);
   font-style:italic;
   font-size:13.5px;
-  line-height:1.4;
-  color:#3a2c22;
-  box-shadow:0 6px 14px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.4) inset;
+  line-height:1.42;
+  color:#241813;
+  box-shadow:0 8px 16px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.15) inset;
   min-height:90px;
   display:flex;
   align-items:center;
   word-break:break-word;
+  border:1px solid rgba(0,0,0,0.12);
 }
 .postit::before{
-  /* cinta adhesiva */
   content:"";
   position:absolute;
   top:-9px;
@@ -391,20 +414,21 @@ body.unlocked #stage{ display:flex; }
   transform:translateX(-50%) rotate(-2deg);
   width:38px;
   height:16px;
-  background:rgba(255,255,255,0.55);
-  border:1px solid rgba(255,255,255,0.3);
+  background:rgba(0,0,0,0.25);
+  border:1px solid rgba(0,0,0,0.15);
 }
 
-.postit:nth-child(10n+1){ background:#fff3a3; }
-.postit:nth-child(10n+2){ background:#ffd6e8; }
-.postit:nth-child(10n+3){ background:#bdeaff; }
-.postit:nth-child(10n+4){ background:#c8f7c5; }
-.postit:nth-child(10n+5){ background:#ffd9b3; }
-.postit:nth-child(10n+6){ background:#e3d1ff; }
-.postit:nth-child(10n+7){ background:#fff3a3; }
-.postit:nth-child(10n+8){ background:#bdeaff; }
-.postit:nth-child(10n+9){ background:#ffd6e8; }
-.postit:nth-child(10n+10){ background:#c8f7c5; }
+/* paleta dark love: borgoña, ciruela, óxido, gris piedra, dorado apagado, vino */
+.postit:nth-child(10n+1){ background:#c79a4f; }
+.postit:nth-child(10n+2){ background:#b6738a; }
+.postit:nth-child(10n+3){ background:#8c98a8; }
+.postit:nth-child(10n+4){ background:#a98f6e; }
+.postit:nth-child(10n+5){ background:#c0876a; }
+.postit:nth-child(10n+6){ background:#9d83a8; }
+.postit:nth-child(10n+7){ background:#c79a4f; }
+.postit:nth-child(10n+8){ background:#8c98a8; }
+.postit:nth-child(10n+9){ background:#b6738a; }
+.postit:nth-child(10n+10){ background:#a98f6e; }
 
 .postit:nth-child(6n+1){ transform:rotate(-3deg); }
 .postit:nth-child(6n+2){ transform:rotate(2deg); }
@@ -415,7 +439,7 @@ body.unlocked #stage{ display:flex; }
 .postit:hover{ transform:scale(1.06) rotate(0deg); z-index:5; transition:transform .2s ease; }
 
 .postit-board::-webkit-scrollbar{ width:4px; }
-.postit-board::-webkit-scrollbar-thumb{ background:var(--gold-soft); border-radius:4px; }
+.postit-board::-webkit-scrollbar-thumb{ background:var(--blood); border-radius:4px; }
 .postit-board::-webkit-scrollbar-track{ background:transparent; }
 
 /* ============================================
@@ -432,7 +456,7 @@ body.unlocked #stage{ display:flex; }
   z-index:50;
 }
 .nav-btn{
-  background:rgba(246,236,217,0.08);
+  background:rgba(233,222,208,0.06);
   border:1px solid var(--gold-soft);
   color:var(--gold-soft);
   width:38px; height:38px;
@@ -444,13 +468,13 @@ body.unlocked #stage{ display:flex; }
   font-size:16px;
   transition:all .2s ease;
 }
-.nav-btn:hover{ background:var(--gold-soft); color:#2a1318; }
+.nav-btn:hover{ background:var(--blood); border-color:var(--blood); color:var(--paper); }
 .nav-btn:disabled{ opacity:0.25; cursor:default; background:none; color:var(--gold-soft); }
 
 #nav-label{
   font-family:var(--script);
   font-style:italic;
-  color:#cbb89a;
+  color:#b69b7d;
   font-size:13px;
   min-width:120px;
   text-align:center;
@@ -467,7 +491,7 @@ body.unlocked #stage{ display:flex; }
   *{ transition:none !important; animation:none !important; }
 }
 
-:focus-visible{ outline:2px solid var(--gold-soft); outline-offset:2px; }
+:focus-visible{ outline:2px solid var(--blood); outline-offset:2px; }
 </style>
 </head>
 <body class="locked">
@@ -503,13 +527,16 @@ body.unlocked #stage{ display:flex; }
 /* ============================================================
    CONTENIDO DEL LIBRO — edita aquí para agregar capítulos
    ============================================================
-   Para agregar un capítulo nuevo, copia un bloque { } dentro
-   del arreglo CAPITULOS y cambia título / fecha / texto.
-   Cada elemento de "texto" es un párrafo distinto.
+   IMPORTANTE: cada párrafo va ENTERO en una sola línea, entre
+   comillas "...", separado del siguiente por una coma.
+   NUNCA presiones Enter dentro de un párrafo: eso rompe el
+   archivo completo (un salto de línea real dentro de "..."
+   es un error de sintaxis en JavaScript).
+   Si un párrafo es muy largo, no pasa nada: déjalo todo en
+   una sola línea, por larga que se vea en el editor.
 ============================================================= */
 
-/* Post-its: 10 notas cortas. Cada elemento es el texto de UN post-it.
-   Para agregar más, solo añade otra línea con coma. */
+/* Post-its: cada elemento es el texto de UN post-it. */
 const NOTAS = [
   "Mentiría si dijera que no me dolió, me rompió un poco. Pero mi amor por ti es más grande que mi dolor, y sigo estando aquí para ti, como siempre.",
   "Quiero que sepas que sigo siendo tu ancla. Acepto tu realidad con él, pero mi cariño por ti sigue intacto y no me voy a ir a ninguna parte.",
@@ -520,7 +547,7 @@ const NOTAS = [
   "El dolor de saberte con él es real, pero no apaga ni un solo segundo lo que siento por ti.",
   "Te dije que era complicado.",
   "Cuenta conmigo siempre.",
-  ",."
+  "Pase lo que pase."
 ];
 
 const RECORDATORIOS = [
@@ -566,22 +593,22 @@ const CAPITULOS = [
     titulo: "Capítulo 2, Refugios de Papel",
     fecha: "",
     texto: [
-      "Noviembre fue un incendio forestal que ninguno de los dos intentó apagar. Los encuentros pasaron de ser robados en la penumbra de un coche a convertirse en una necesidad visceral. Se veían en hoteles de paso, en escaleras vacías, en cualquier rincón donde pudieran devorarse lejos de las miradas del mundo. Cada vez era más intenso, más crudo, más profundo. Él le daba el caos que silenciaba su mente; ella le daba el fuego que lo hacía sentir vivo.
-Pero entonces llegó diciembre.
-Con el último mes del año, una extraña y frágil paz se instaló en el aire, pero para alguien con una mente que nunca se apaga, la paz suele ser el preludio de la tormenta. Las calles se llenaron de luces, las oficinas de pláticas sobre cenas familiares, y la realidad golpeó a su puerta con una frialdad insoportable. Él tenía una esposa. Tenía compromisos, cenas a las que asistir, un anillo que brillaba bajo las luces navideñas.
-Y ella tenía un vacío en el pecho que amenazaba con tragarla entera.
-El villano no lo sabía, pero ella sentía cada una de sus ausencias como un abandono físico. Cuando él regresaba a su casa, ella se quedaba sola en la suya, lidiando con el silencio ensordecedor y con la culpa de no poder ofrecerle a su hijo la estabilidad que tanto merecía.
-Fue entonces cuando la presencia de su exmarido comenzó a sentirse como un salvavidas.
-Él no tenía la intensidad eléctrica del villano, ni le hacía hervir la sangre, pero tenía algo que ella, en su desesperación por anclarse a la realidad, necesitaba: solidez. Su exmarido podía pagar las facturas que a ella la asfixiaban de ansiedad, algo que el villano, con su vida dividida y su sueldo atado a otra familia, no podía respaldar. Pero, sobre todo, su exmarido podía tirarse al suelo a jugar con su hijo.
-Una tarde, ella los observó desde el marco de la puerta. Escuchó la risa limpia de su pequeño mientras su exmarido le armaba un fuerte de almohadas. Una punzada de dolor y anhelo le atravesó la garganta. Quería desesperadamente ser normal. Quería dejar de ser un huracán de emociones inestables. Quería que su hijo tuviera una familia intacta. El villano le ofrecía adrenalina, pero su mente agotada le suplicaba un lugar seguro donde descansar.
-La fractura ocurrió a mediados de mes. Su exmarido regresó de un viaje de negocios, agotado, y la tormenta de nieve afuera sirvió como la excusa perfecta para que se quedara a dormir en la habitación de invitados.
-Esa noche, el miedo al abandono y el pánico al vacío que caracterizaban su trastorno la atacaron con crueldad. Se sentía rota, indigna, un desastre andante que solo sabía arruinar las cosas. Buscando consuelo, caminando como un fantasma por su propia casa, terminó en la puerta de esa habitación. Cuando su exmarido la miró, no vio el caos que el villano adoraba; vio a la madre de su hijo, vio historia, vio familiaridad.
-Sus cuerpos se encontraron no por deseo desenfrenado, sino por una necesidad desesperada de ella de aferrarse a algo conocido, de silenciar los demonios de su cabeza con la anestesia de la rutina y la nostalgia. Fue un intento trágico de reparar un hogar que ya estaba roto, de convencerse de que podía ser la mujer estable que el mundo esperaba que fuera. No había malicia en ella, solo un instinto de supervivencia emocional llevado al límite.
-Pero en el ajedrez del dark romance, cada movimiento tiene un precio.
-El villano lo supo. No necesitó que ella se lo confesara directamente; lo leyó en la forma en que ella desvió la mirada al día siguiente, en la tensión de sus hombros, en el olor a culpa que impregnaba su ropa.
-Y el impacto lo destrozó con una violencia que él jamás habría admitido en voz alta.
-Él, que se autoproclamaba el malo del cuento, se sintió brutalmente desplazado. Lo que ella no sabía era que, mientras él cumplía sus obligaciones maritales en diciembre, su cabeza no había dejado de trabajar. Había tejido mil planes en la sombra. Había inventado viajes de trabajo falsos, cuadriculado horarios imposibles, trazado rutas de escape y ahorrado dinero en cuentas secretas, todo con un solo propósito: robarle tiempo al mundo para dárselo a ella. Estaba dispuesto a quemar su propio castillo solo para poder ser el refugio de ella.
-Saber que ella había buscado asilo en los brazos de un hombre que representaba todo lo ordinario que él despreciaba, lo llenó de un veneno oscuro. No era solo celos; era la herida de un hombre territorial que, por primera vez en su vida, había intentado construir algo en lugar de destruirlo, solo para darse cuenta de que no había llegado a tiempo."
+      "Noviembre fue un incendio forestal que ninguno de los dos intentó apagar. Los encuentros pasaron de ser robados en la penumbra de un coche a convertirse en una necesidad visceral. Se veían en hoteles de paso, en escaleras vacías, en cualquier rincón donde pudieran devorarse lejos de las miradas del mundo. Cada vez era más intenso, más crudo, más profundo. Él le daba el caos que silenciaba su mente; ella le daba el fuego que lo hacía sentir vivo.",
+      "Pero entonces llegó diciembre.",
+      "Con el último mes del año, una extraña y frágil paz se instaló en el aire, pero para alguien con una mente que nunca se apaga, la paz suele ser el preludio de la tormenta. Las calles se llenaron de luces, las oficinas de pláticas sobre cenas familiares, y la realidad golpeó a su puerta con una frialdad insoportable. Él tenía una esposa. Tenía compromisos, cenas a las que asistir, un anillo que brillaba bajo las luces navideñas.",
+      "Y ella tenía un vacío en el pecho que amenazaba con tragarla entera.",
+      "El villano no lo sabía, pero ella sentía cada una de sus ausencias como un abandono físico. Cuando él regresaba a su casa, ella se quedaba sola en la suya, lidiando con el silencio ensordecedor y con la culpa de no poder ofrecerle a su hijo la estabilidad que tanto merecía.",
+      "Fue entonces cuando la presencia de su exmarido comenzó a sentirse como un salvavidas.",
+      "Él no tenía la intensidad eléctrica del villano, ni le hacía hervir la sangre, pero tenía algo que ella, en su desesperación por anclarse a la realidad, necesitaba: solidez. Su exmarido podía pagar las facturas que a ella la asfixiaban de ansiedad, algo que el villano, con su vida dividida y su sueldo atado a otra familia, no podía respaldar. Pero, sobre todo, su exmarido podía tirarse al suelo a jugar con su hijo.",
+      "Una tarde, ella los observó desde el marco de la puerta. Escuchó la risa limpia de su pequeño mientras su exmarido le armaba un fuerte de almohadas. Una punzada de dolor y anhelo le atravesó la garganta. Quería desesperadamente ser normal. Quería dejar de ser un huracán de emociones inestables. Quería que su hijo tuviera una familia intacta. El villano le ofrecía adrenalina, pero su mente agotada le suplicaba un lugar seguro donde descansar.",
+      "La fractura ocurrió a mediados de mes. Su exmarido regresó de un viaje de negocios, agotado, y la tormenta de nieve afuera sirvió como la excusa perfecta para que se quedara a dormir en la habitación de invitados.",
+      "Esa noche, el miedo al abandono y el pánico al vacío que caracterizaban su trastorno la atacaron con crueldad. Se sentía rota, indigna, un desastre andante que solo sabía arruinar las cosas. Buscando consuelo, caminando como un fantasma por su propia casa, terminó en la puerta de esa habitación. Cuando su exmarido la miró, no vio el caos que el villano adoraba; vio a la madre de su hijo, vio historia, vio familiaridad.",
+      "Sus cuerpos se encontraron no por deseo desenfrenado, sino por una necesidad desesperada de ella de aferrarse a algo conocido, de silenciar los demonios de su cabeza con la anestesia de la rutina y la nostalgia. Fue un intento trágico de reparar un hogar que ya estaba roto, de convencerse de que podía ser la mujer estable que el mundo esperaba que fuera. No había malicia en ella, solo un instinto de supervivencia emocional llevado al límite.",
+      "Pero en el ajedrez del dark romance, cada movimiento tiene un precio.",
+      "El villano lo supo. No necesitó que ella se lo confesara directamente; lo leyó en la forma en que ella desvió la mirada al día siguiente, en la tensión de sus hombros, en el olor a culpa que impregnaba su ropa.",
+      "Y el impacto lo destrozó con una violencia que él jamás habría admitido en voz alta.",
+      "Él, que se autoproclamaba el malo del cuento, se sintió brutalmente desplazado. Lo que ella no sabía era que, mientras él cumplía sus obligaciones maritales en diciembre, su cabeza no había dejado de trabajar. Había tejido mil planes en la sombra. Había inventado viajes de trabajo falsos, cuadriculado horarios imposibles, trazado rutas de escape y ahorrado dinero en cuentas secretas, todo con un solo propósito: robarle tiempo al mundo para dárselo a ella. Estaba dispuesto a quemar su propio castillo solo para poder ser el refugio de ella.",
+      "Saber que ella había buscado asilo en los brazos de un hombre que representaba todo lo ordinario que él despreciaba, lo llenó de un veneno oscuro. No era solo celos; era la herida de un hombre territorial que, por primera vez en su vida, había intentado construir algo en lugar de destruirlo, solo para darse cuenta de que no había llegado a tiempo."
     ]
   },
   {
@@ -611,6 +638,8 @@ Saber que ella había buscado asilo en los brazos de un hombre que representaba 
   // 👉 Para agregar el Capítulo 6, copia un bloque como los de arriba,
   // pega una COMA "," justo después del "}" anterior (el de Capítulo 5),
   // y agrega tu nuevo bloque { ... } aquí abajo.
+  // Recuerda: cada párrafo en su propia línea entre comillas "...",
+  // nunca con Enter en medio del texto.
 ];
 
 /* ============================================================
@@ -644,19 +673,10 @@ let current = 0;
 function buildBook(){
   pages = [];
 
-  // Portada
   pages.push({ type:'cover' });
-
-  // Índice
   pages.push({ type:'toc' });
-
-  // Notas (corcho de post-its, una sola página)
   pages.push({ type:'postits' });
-
-  // Capítulos del libro
   CAPITULOS.forEach((c, i) => pages.push({ type:'content', eyebrow:'Nuestro libro', data:c, group:'capitulos', idx:i }));
-
-  // Recordatorios
   RECORDATORIOS.forEach((r, i) => pages.push({ type:'content', eyebrow:'Recordatorio', data:r, group:'recordatorios', idx:i }));
 
   current = 0;
@@ -686,7 +706,7 @@ function pageHTML(p, pageNum){
   }
   if(p.type === 'toc'){
     let html = `<div class="page"><p class="page-eyebrow">Índice</p><h2 class="page-title">Tabla de contenidos</h2><div class="page-divider"></div><ul class="toc-list">`;
-    let n = 2; // arranca después de portada+índice
+    let n = 2;
     html += `<li class="toc-section-label" style="border:none;cursor:default;">Notas</li>`;
     n++; html += tocRow('Notas para ti', n);
     html += `<li class="toc-section-label" style="border:none;cursor:default;">Nuestro libro</li>`;
@@ -696,7 +716,6 @@ function pageHTML(p, pageNum){
     html += `</ul></div>`;
     return html;
   }
-  // contenido
   const d = p.data;
   const paras = d.texto.map(t => `<p>${t}</p>`).join('');
   return `
@@ -730,7 +749,6 @@ function renderPage(){
 }
 
 function goToPageNumber(n){
-  // n es 1-indexado tal como se muestra en el índice
   current = Math.max(0, Math.min(pages.length - 1, n - 1));
   renderPage();
 }
@@ -755,7 +773,6 @@ document.addEventListener('keydown', function(e){
   if(e.key === 'ArrowLeft') prevPage();
 });
 
-// swipe básico en móvil
 let touchStartX = 0;
 document.getElementById('stage').addEventListener('touchstart', e=>{
   touchStartX = e.changedTouches[0].screenX;
